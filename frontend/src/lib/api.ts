@@ -72,6 +72,8 @@ export const api = {
     return fetch(`${AGENT}/incidents?${q}`).then(json<IncidentSummary[]>);
   },
 
+  getIncident: (id: string) => fetch(`${AGENT}/incidents/${id}`).then(json<Diagnosis>),
+
   getStats: () => fetch(`${AGENT}/incidents/summary`).then(json<IncidentStats>),
 
   triggerChaos: (service: string, scenario: string) =>

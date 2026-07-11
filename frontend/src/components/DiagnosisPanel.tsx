@@ -2,7 +2,7 @@
 
 import type { Diagnosis } from '@/lib/api';
 
-const KIND_LABEL: Record<string, string> = {
+export const KIND_LABEL: Record<string, string> = {
   'agent:tool_use': 'ツール実行',
   'agent:final': '最終回答',
   'agent:final_forced': '最終回答 (上限到達)',
