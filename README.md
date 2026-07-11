@@ -50,7 +50,7 @@ Cloud Logging → Log Router → BigQuery (query_logs はこの表を SQL 集計
 依存する外部サービス:
 
 - Gemini API (`gemini-2.5-flash` + `gemini-embedding-001`。無料枠は 1 分 15 リクエスト、1 日 100 万トークン)
-- Supabase Postgres + pgvector 拡張 (無料枠 500 MB)
+- Postgres + pgvector 拡張 (Neon の無料枠で動作確認)
 - GitHub API (個人アクセストークンで 1 時間 5000 リクエスト)
 - BigQuery + Cloud Logging (ログ集計を有効にする場合)
 - Slack ワークスペース (任意)

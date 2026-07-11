@@ -16,6 +16,6 @@
 
 - [ ] Conventional Commits (subject 日本語、prefix 英語)
 - [ ] 1 commit 1 関心事
-- [ ] LLM Connector / MCP Provider 変更時は interface 抽象化 (ADR-0001) 維持
+- [ ] LLM Connector / MCP Provider 変更時は interface 抽象化を維持
 - [ ] エンドポイント追加時は OpenAPI 互換性を意識
-- [ ] README / CHANGELOG / SECURITY と矛盾しない
+- [ ] README と矛盾しない
