@@ -1,0 +1,17 @@
+.git
+.gitignore
+.idea
+.vscode
+*.iml
+build/
+.gradle/
+gradle-app.setting
+**/test-results/
+**/build/
+docs/
+README.md
+CHANGELOG.md
+SECURITY.md
+CONTRIBUTING.md
+LICENSE
+.demo-logs/

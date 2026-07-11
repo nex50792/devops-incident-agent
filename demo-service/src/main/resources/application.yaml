@@ -1,0 +1,16 @@
+server:
+  port: ${PORT:8082}
+
+spring:
+  application:
+    name: demo-service
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info
+  endpoint:
+    health:
+      probes:
+        enabled: true

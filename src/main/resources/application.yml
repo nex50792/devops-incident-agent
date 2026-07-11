@@ -1,0 +1,51 @@
+spring:
+  application:
+    name: devops-incident-agent
+  # spring.datasource.url を明示的に指定した場合は、この exclude を空にすると JDBC が有効化される
+  autoconfigure:
+    exclude: ${INCIDENT_AUTOCONFIGURE_EXCLUDE:org.springframework.boot.jdbc.autoconfigure.DataSourceAutoConfiguration,org.springframework.boot.jdbc.autoconfigure.JdbcTemplateAutoConfiguration,org.springframework.boot.jdbc.autoconfigure.DataSourceTransactionManagerAutoConfiguration,org.springframework.boot.jdbc.autoconfigure.health.DataSourceHealthContributorAutoConfiguration}
+
+server:
+  port: ${PORT:8081}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include:
+          - health
+          - info
+          - metrics
+          - prometheus
+  endpoint:
+    health:
+      show-details: when_authorized
+  info:
+    env:
+      enabled: true
+  metrics:
+    tags:
+      application: ${spring.application.name}
+    distribution:
+      percentiles-histogram:
+        # incident.analyze.duration の HDR 分布を Prometheus 用に出力
+        incident.analyze.duration: true
+        mcp.call.duration: true
+        llm.call.duration: true
+      percentiles:
+        incident.analyze.duration: 0.5, 0.95, 0.99
+        mcp.call.duration: 0.5, 0.95, 0.99
+        llm.call.duration: 0.5, 0.95, 0.99
+
+info:
+  app:
+    description: オンコールエンジニア向け AI インシデント対応 Agent
+    status: WIP
+
+logging:
+  level:
+    root: INFO
+    com.example.incident: DEBUG
+  pattern:
+    # MDC で incident_id / trace_step / trace_kind が付いたログを構造化表示
+    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level [%X{incident_id:-}] [%X{trace_step:-}/%X{trace_kind:-}] %logger{36} - %msg%n"
