@@ -99,8 +99,16 @@ class IncidentConfig(
         store: IncidentStore,
     ): IncidentAnalysisService = IncidentAnalysisService(provider, llm, repoPath, meterRegistry, store)
 
+    // getDefaultInstance は GCP 環境情報 (ADC) から project を推測しようとして
+    // 見つからないと起動自体が失敗するため、project-id 設定時のみ bean を生成する
     @Bean
-    fun bigQuery(): BigQuery = BigQueryOptions.getDefaultInstance().service
+    @ConditionalOnProperty(name = ["incident.bigquery.project-id"])
+    fun bigQuery(): BigQuery =
+        BigQueryOptions
+            .newBuilder()
+            .setProjectId(requireNotNull(bqProjectId).trim())
+            .build()
+            .service
 
     @Bean
     fun geminiClient(): Client {
@@ -119,7 +127,7 @@ class IncidentConfig(
 
     @Bean
     fun toolRegistry(
-        bigQuery: BigQuery,
+        bigQuery: BigQuery?,
         postmortemTool: SearchPostmortemTool?,
     ): ToolRegistry {
         val tools = mutableListOf<Tool>()
@@ -131,7 +139,7 @@ class IncidentConfig(
 
         // 外部 SaaS tools
         val project = bqProjectId?.trim().orEmpty()
-        if (project.isNotEmpty()) {
+        if (bigQuery != null && project.isNotEmpty()) {
             tools += QueryLogsTool(bigQuery, project, bqDataset, bqTable)
             log.info("Registered query_logs tool: {}.{}.{}", project, bqDataset, bqTable)
         } else {
